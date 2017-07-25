@@ -1,0 +1,16 @@
+  mantisbt:
+  image: rpi-mantisbt:latest
+  ports:
+    - "80:80"
+  links:
+    - mysql
+  restart: always
+
+mysql:
+  image: rpi-mysql:latest
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=bugtracker
+    - MYSQL_USER=mantis
+    - MYSQL_PASSWORD=mantis
+  restart: always
