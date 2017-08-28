@@ -9,7 +9,6 @@ MAINTAINER Bruno Cardoso Cantisano <bruno.cantisano@gmail.com>
 RUN apt-get update
 RUN apt-get -y upgrade
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
-
         mysql-client \
         apache2 \
         libapache2-mod-php5 \
@@ -35,16 +34,16 @@ RUN cp -aR /mantisbt-*/* /app
 RUN chown -R www-data:www-data /app
 
 # Use our default config
-ADD config_inc.php /app/config_inc.php
+COPY files/config_inc.php /app/config_inc.php
 
 # Initialize custom config from volume
-ADD volume-init.sh /volume-init.sh
+COPY files/volume-init.sh /volume-init.sh
 RUN chmod 755 /volume-init.sh
 
 # Configure and start apache
-ADD vhost.conf /etc/apache2/sites-enabled/000-default.conf
-ADD run.sh /run.sh
+COPY files/vhost.conf /etc/apache2/sites-enabled/000-default.conf
+COPY files/run-mantis.sh /run-mantis.sh
 
 EXPOSE 80
 WORKDIR /app
-CMD ["/run.sh"]
+CMD ["/run-mantis.sh"]

@@ -1,29 +1,33 @@
-`MantisBT` is an open source issue tracker that provides
-a delicate balance between simplicity and power.
+# Mantis Bug Tracker
 
-## docker-compose.yml
+![docker_logo](https://raw.githubusercontent.com/brunocantisano/rpi-mantisbt/master/files/docker.png)![docker_mantisbt_logo](https://raw.githubusercontent.com/brunocantisano/rpi-mantisbt/master/files/logo-mantis.png)![docker_paperinik_logo](https://raw.githubusercontent.com/brunocantisano/rpi-mantisbt/master/files/docker_paperinik_120x120.png)
 
-```
-mantisbt:
-  image: rpi-mantisbt:latest
-  ports:
-    - "80:80"
-  links:
-    - mysql
-  restart: always
-mysql:
-  image: rpi-mysql:latest
-  environment:
-    - MYSQL_ROOT_PASSWORD=root
-    - MYSQL_DATABASE=bugtracker
-    - MYSQL_USER=mantisbt
-    - MYSQL_PASSWORD=mantisbt
-  restart: always
+This Docker container implements a `MantisBT`. It's an open source issue tracker that provides a delicate balance between simplicity and power.
+
+ * Raspbian base image.
+ 
+### Installation from [Docker registry hub](https://registry.hub.docker.com/u/paperinik/rpi-mantisbt/).
+
+You can download the image with the following command:
+
+```bash
+docker pull paperinik/rpi-mantisbt
 ```
 
-> You can use `mariadb`/`postgres` instead of `mysql`.
+# How to use this image
 
-## install
+Exposed ports
+----
+
+The image exposes port `80`.
+
+Use cases
+
+You can use `mariadb`/`postgres` instead of `mysql`.
+
+----
+
+1) Install
 
 ```
 $ firefox http://localhost:9400/admin/install.php
@@ -31,23 +35,19 @@ $ firefox http://localhost:9400/admin/install.php
 >>> password: root
 ```
 
-```
-==================================================================================
-Installation Options
-==================================================================================
-Type of Database                                        MySQL/MySQLi
-Hostname (for Database Server)                          mysql
-Username (for Database)                                 mantisbt
-Password (for Database)                                 mantisbt
-Database name (for Database)                            bugtracker
-Admin Username (to create Database if required)         root
-Admin Password (to create Database if required)         root
-Print SQL Queries instead of Writing to the Database    [ ]
-Attempt Installation                                    [Install/Upgrade Database]
-==================================================================================
-```
+2) Installation Options
 
-## email
+* Type of Database                                        MySQL/MySQLi
+* Hostname (for Database Server)                          mysql
+* Username (for Database)                                 mantisbt
+* Password (for Database)                                 mantisbt
+* Database name (for Database)                            bugtracker
+* Admin Username (to create Database if required)         root
+* Admin Password (to create Database if required)         root
+* Print SQL Queries instead of Writing to the Database    [ ]
+* Attempt Installation                                    [Install/Upgrade Database]
+
+3) Email
 
 Append following to `/var/www/html/config_inc.php`
 
