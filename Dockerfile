@@ -17,33 +17,36 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
         php5-gd \
         php5-curl \
         wget \
-        php-pear && rm -rf /var/lib/apt/lists/*
-
-RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
-RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/cli/php.ini
-
-RUN a2enmod rewrite
-RUN a2enmod headers
-
-RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
-
-# Install vanilla MantisBT
-RUN wget http://sourceforge.net/projects/mantisbt/files/mantis-stable/1.2.19/mantisbt-1.2.19.tar.gz/download -O /mantisbt.tar.gz
-RUN tar -zvxf /mantisbt.tar.gz
-RUN cp -aR /mantisbt-*/* /app
-RUN chown -R www-data:www-data /app
+        php-pear && rm -rf /var/lib/apt/lists/* && \
+        sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini && \
+	    sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/cli/php.ini && \
+	    a2enmod rewrite && \
+        a2enmod headers && \
+        mkdir -p /app && \
+        rm -fr /var/www/html && \
+        ln -s /app /var/www/html && \
+        # Install vanilla MantisBT \
+    	wget http://sourceforge.net/projects/mantisbt/files/mantis-stable/1.2.19/mantisbt-1.2.19.tar.gz/download -O /mantisbt.tar.gz && \
+    	tar -zvxf /mantisbt.tar.gz && \
+    	cp -aR /mantisbt-*/* /app && \
+    	rm -rf /mantisbt* && \
+		chown -R www-data:www-data /app
 
 # Use our default config
 COPY files/config_inc.php /app/config_inc.php
 
 # Initialize custom config from volume
 COPY files/volume-init.sh /volume-init.sh
-RUN chmod 755 /volume-init.sh
 
 # Configure and start apache
 COPY files/vhost.conf /etc/apache2/sites-enabled/000-default.conf
 COPY files/run-mantis.sh /run-mantis.sh
 
-EXPOSE 80
 WORKDIR /app
+
+RUN chmod 755 /volume-init.sh && \
+    chmod 755 /run-mantis.sh
+
+EXPOSE 80
+
 CMD ["/run-mantis.sh"]

@@ -76,7 +76,7 @@ $g_smtp_password = '********';
 5) run the container using a previous running mysql container
 ```bash
 docker run -d --name mantisbt \
-           -e DATABASE_URL=jdbc://mantis:mantis@172.17.0.7:9408/bugtracker \
+           -e DATABASE_URL=jdbc://mantis:mantis@0.0.0.0:9415/bugtracker \
            -p 9407:80 --link mysql:db \
            paperinik/rpi-mantisbt:latest
 ```
