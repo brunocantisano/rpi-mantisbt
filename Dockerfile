@@ -19,8 +19,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
         wget \
         php-pear && rm -rf /var/lib/apt/lists/* && \
         sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini && \
-	    sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/cli/php.ini && \
-	    a2enmod rewrite && \
+        sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/cli/php.ini && \
+        a2enmod rewrite && \
         a2enmod headers && \
         mkdir -p /app && \
         rm -fr /var/www/html && \
@@ -30,7 +30,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
     	tar -zvxf /mantisbt.tar.gz && \
     	cp -aR /mantisbt-*/* /app && \
     	rm -rf /mantisbt* && \
-		chown -R www-data:www-data /app
+        mkdir /data && \
+        chown -R www-data:www-data /app
 
 # Use our default config
 COPY files/config_inc.php /app/config_inc.php
@@ -45,7 +46,8 @@ COPY files/run-mantis.sh /run-mantis.sh
 WORKDIR /app
 
 RUN chmod 755 /volume-init.sh && \
-    chmod 755 /run-mantis.sh
+    chmod 755 /run-mantis.sh && \
+    chmod 755 -R /data
 
 EXPOSE 80
 
