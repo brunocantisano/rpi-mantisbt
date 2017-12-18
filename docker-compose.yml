@@ -9,13 +9,13 @@ mysql:
     - /media/usbraid/docker/mysql/data:/var/lib/postgresql/data
     - /media/usbraid/docker/mysql/etc:/etc/mysql/conf.d
   ports:
-    - "3306:3306"
+    - "9415:3306"
   restart: always
 
 mantisbt:
   image: paperinik/rpi-mantisbt:latest
   environment:
-    - DATABASE_URL=jdbc://mantis:mantis@192.168.1.30:3306/bugtracker
+    - DATABASE_URL=jdbc://mantis:mantis@mysql:9415/bugtracker
   ports:
     - "9400:80"
   links:
